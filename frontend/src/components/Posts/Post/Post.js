@@ -11,13 +11,16 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useDispatch } from "react-redux";
 
+import postsAction from "../../../actions/posts";
 import useStyles from "./styles";
 
 dayjs.extend(relativeTime);
 
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   return (
     <Card className={classes.card}>
@@ -28,9 +31,7 @@ const Post = ({ post, setCurrentId }) => {
       />
       <div className={classes.overlay}>
         <Typography variant="h6">{post.creator}</Typography>
-        <Typography variant="body2">
-          {dayjs(post.createdAt).fromNow()}
-        </Typography>
+        <Typography variant="body2">{dayjs(post.createAt).from()}</Typography>
       </div>
       <div className={classes.overlay2}>
         <Button
@@ -46,18 +47,29 @@ const Post = ({ post, setCurrentId }) => {
           {post.tags.map((tag) => `#${tag} `)}
         </Typography>
       </div>
+      <Typography className={classes.title} variant="h5" gutterBottom>
+        {post.title}
+      </Typography>
       <CardContent>
-        <Typography className={classes.title} variant="h5" gutterBottom>
+        <Typography variant="body2" color="textSecondary" component="p">
           {post.message}
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <Button size="small" color="primary" onClick={() => {}}>
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => dispatch(postsAction.likePost(post._id))}
+        >
           <ThumbUpAltIcon fontSize="small" />
-          Like
+          &nbsp; Like &nbsp;
           {post.likeCount}
         </Button>
-        <Button size="small" color="primary" onClick={() => {}}>
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => dispatch(postsAction.deletePost(post._id))}
+        >
           <DeleteIcon fontSize="small" />
           Delete
         </Button>

@@ -4,7 +4,7 @@ import FileBase from "react-file-base64";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
-import { createPost, updatePost } from "../../actions/posts";
+import postsAction from "../../actions/posts";
 import useStyles from "./styles";
 
 const Form = ({ currentId, setCurrentId }) => {
@@ -29,9 +29,9 @@ const Form = ({ currentId, setCurrentId }) => {
     e.preventDefault();
 
     if (currentId) {
-      dispatch(updatePost(currentId, postData));
+      dispatch(postsAction.updatePost(currentId, postData));
     } else {
-      dispatch(createPost(postData));
+      dispatch(postsAction.createPost(postData));
     }
 
     clear();
