@@ -1,14 +1,17 @@
 import client from "./client";
 
-const fetchPosts = () => client.get("/");
+const endPoint = "/posts";
 
-const createPost = (newPost) => client.post("/", newPost);
+const fetchPosts = () => client.get(endPoint);
 
-const updatePost = (id, updatedPost) => client.patch(`/${id}`, updatedPost);
+const createPost = (newPost) => client.post(endPoint, newPost);
 
-const removePost = (id) => client.delete(`/${id}`);
+const updatePost = (id, updatedPost) =>
+  client.patch(endPoint + `/${id}`, updatedPost);
 
-const likePost = (id) => client.patch(`/${id}/likePost`);
+const removePost = (id) => client.delete(endPoint + `/${id}`);
+
+const likePost = (id) => client.patch(endPoint + `/${id}/likePost`);
 
 export default {
   fetchPosts,
