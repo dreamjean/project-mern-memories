@@ -1,9 +1,9 @@
-import authApi from "../api/auth";
+import userApi from "../api/user";
 import { AUTH } from "../constants/actionTypes";
 
 const signin = (formData, history) => async (dispatch) => {
   try {
-    const { data } = await authApi.login(formData);
+    const { data } = await userApi.login(formData);
 
     dispatch({ type: AUTH, data });
 
@@ -15,7 +15,7 @@ const signin = (formData, history) => async (dispatch) => {
 
 const signup = (formData, history) => async (dispatch) => {
   try {
-    const { data } = await authApi.register(formData);
+    const { data } = await userApi.register(formData);
 
     dispatch({ type: AUTH, data });
 

@@ -1,4 +1,5 @@
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@material-ui/core";
+import decode from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
@@ -15,6 +16,14 @@ const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
+    const token = user?.token;
+
+    if (token) {
+      const decodeToken = decode(token);
+
+      if (decodeToken.exp * 1000 < new Date().getTime()) logout();
+    }
+
     setUser(JSON.parse(localStorage.getItem("profile")));
   }, [location]);
 

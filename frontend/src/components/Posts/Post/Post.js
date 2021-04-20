@@ -8,12 +8,12 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useDispatch } from "react-redux";
 
 import postsAction from "../../../actions/posts";
+import Likes from "./Likes";
 import useStyles from "./styles";
 
 dayjs.extend(relativeTime);
@@ -21,6 +21,7 @@ dayjs.extend(relativeTime);
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("profile"));
 
   return (
     <Card className={classes.card}>
@@ -30,18 +31,23 @@ const Post = ({ post, setCurrentId }) => {
         title={post.title}
       />
       <div className={classes.overlay}>
-        <Typography variant="h6">{post.creator}</Typography>
-        <Typography variant="body2">{dayjs(post.createAt).from()}</Typography>
+        <Typography variant="h6">{post.name}</Typography>
+        <Typography variant="body2">
+          {dayjs(post.createdAt).fromNow()}
+        </Typography>
       </div>
-      <div className={classes.overlay2}>
-        <Button
-          style={{ color: "white" }}
-          size="small"
-          onClick={() => setCurrentId(post._id)}
-        >
-          <MoreHorizIcon fontSize="default" />
-        </Button>
-      </div>
+      {(user?.result?.googleId === post?.creator ||
+        user?.result?._id === post?.creator) && (
+        <div className={classes.overlay2}>
+          <Button
+            style={{ color: "white" }}
+            size="small"
+            onClick={() => setCurrentId(post._id)}
+          >
+            <MoreHorizIcon fontSize="default" />
+          </Button>
+        </div>
+      )}
       <div className={classes.details}>
         <Typography variant="body2" color="textSecondary">
           {post.tags.map((tag) => `#${tag} `)}
@@ -59,20 +65,22 @@ const Post = ({ post, setCurrentId }) => {
         <Button
           size="small"
           color="primary"
+          disabled={!user?.result}
           onClick={() => dispatch(postsAction.likePost(post._id))}
         >
-          <ThumbUpAltIcon fontSize="small" />
-          &nbsp; Like &nbsp;
-          {post.likeCount}
+          <Likes user={user} likes={post.likes} />
         </Button>
-        <Button
-          size="small"
-          color="primary"
-          onClick={() => dispatch(postsAction.deletePost(post._id))}
-        >
-          <DeleteIcon fontSize="small" />
-          Delete
-        </Button>
+        {(user?.result?.googleId === post?.creator ||
+          user?.result?._id === post?.creator) && (
+          <Button
+            size="small"
+            color="secondary"
+            onClick={() => dispatch(postsAction.deletePost(post._id))}
+          >
+            <DeleteIcon fontSize="small" />
+            Delete
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
