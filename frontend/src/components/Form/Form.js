@@ -1,8 +1,7 @@
 import { Button, Paper, TextField, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import postsAction from "../../actions/posts";
 import useStyles from "./styles";
